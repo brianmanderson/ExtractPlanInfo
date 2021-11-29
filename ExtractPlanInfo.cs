@@ -73,10 +73,13 @@ namespace ExtractPlanInfo
             string out_path, patient_path;
             string base_path = @"C:\Users\b5anderson\Desktop\Plan_Data";
             string overall_path = Path.Combine(base_path, "All_Patients.txt");
-            StreamWriter fid_overall = return_streamwriter(overall_path, false);
-            string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
-            fid_overall.WriteLine(top_row);
-            fid_overall.Close();
+            if (!File.Exists(overall_path))
+            {
+                StreamWriter fid_overall = return_streamwriter(overall_path, false);
+                string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
+                fid_overall.WriteLine(top_row);
+                fid_overall.Close();
+            }
             var items = ReadCSV(@"K:\MRN_Diagnosis.csv");
             mrnList = items.Item1.ToList();
             diagnosisList = items.Item2.ToList();
@@ -84,11 +87,11 @@ namespace ExtractPlanInfo
             {
                 patient_MRN = mrnList[i];
                 patient_path = Path.Combine(base_path, patient_MRN);
-                System.Console.WriteLine($"{patient_MRN}");
                 if (Directory.Exists(patient_path)) // If this path already exists, just move along
                 {
                     continue;
                 }
+                System.Console.WriteLine($"{patient_MRN}");
                 System.Threading.Thread.Sleep(1000);
                 Patient pat = app.OpenPatientById(patient_MRN);
                 if (pat is null)
