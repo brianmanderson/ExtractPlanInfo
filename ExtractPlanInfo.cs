@@ -73,7 +73,7 @@ namespace ExtractPlanInfo
             string out_path, patient_path;
             string base_path = @"C:\Users\b5anderson\Desktop\Plan_Data";
             string overall_path = Path.Combine(base_path, "All_Patients.txt");
-            StreamWriter fid_overall = return_streamwriter(overall_path, true);
+            StreamWriter fid_overall = return_streamwriter(overall_path, false);
             string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
             fid_overall.WriteLine(top_row);
             fid_overall.Close();
