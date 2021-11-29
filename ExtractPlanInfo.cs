@@ -74,7 +74,7 @@ namespace ExtractPlanInfo
             string base_path = @"C:\Users\b5anderson\Desktop\Plan_Data";
             string overall_path = Path.Combine(base_path, "All_Patients.txt");
             StreamWriter fid_overall = return_streamwriter(overall_path, true);
-            string top_row = "MRN, CourseID, PlanID, BeamID, SSD, GantryAngle, Diagnosis Code";
+            string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
             fid_overall.WriteLine(top_row);
             fid_overall.Close();
             var items = ReadCSV(@"K:\MRN_Diagnosis.csv");
@@ -89,17 +89,13 @@ namespace ExtractPlanInfo
                 {
                     continue;
                 }
-                else
-                {
-                    Directory.CreateDirectory(patient_path);
-                }
                 System.Threading.Thread.Sleep(1000);
                 Patient pat = app.OpenPatientById(patient_MRN);
                 if (pat is null)
                 {
                     continue;
                 }
-
+                Directory.CreateDirectory(patient_path);
                 foreach (Course course in pat.Courses)
                 {
                     // Check to see if the diagnosis from our excel sheet is present here
@@ -119,7 +115,7 @@ namespace ExtractPlanInfo
                                 foreach (Beam beam in external_beam_plan.Beams)
                                 {
                                     double SSD = beam.PlannedSSD;
-                                    string info = $"{mrnList[i]},{course.Id.Replace('/', '.')},{external_beam_plan.Id},{beam.Id},{SSD},{beam.ControlPoints[0].GantryAngle},{diagnosis.Code.Trim()}";
+                                    string info = $"{mrnList[i]},{course.Id.Replace('/', '.')},{external_beam_plan.Id},{beam.Id},{beam.EnergyModeDisplayName},{SSD},{beam.ControlPoints[0].GantryAngle},{diagnosis.Code.Trim()}";
                                     fid.WriteLine(info);
                                     StreamWriter fid_over = return_streamwriter(overall_path, false);
                                     fid_over.WriteLine(info);
