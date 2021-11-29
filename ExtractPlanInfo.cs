@@ -109,7 +109,7 @@ namespace ExtractPlanInfo
                         if (diagnosisList.Contains(diagnosis.Code.Trim()))
                         {
                             has_diagnosis = true;
-                            out_path = Path.Combine(base_path, $"{pat.Id}_{course.Id.Replace('/','.').Replace(':','.')}.txt");
+                            out_path = Path.Combine(patient_path, $"{course.Id.Replace('/','.').Replace(':','.')}.txt");
                             System.Console.WriteLine($"{out_path}");
                             StreamWriter fid = return_streamwriter(out_path, true);
                             fid.WriteLine(top_row);
