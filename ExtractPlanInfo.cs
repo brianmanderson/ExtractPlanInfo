@@ -34,23 +34,23 @@ namespace ExtractPlanInfo
         Console.Error.WriteLine(e.ToString());
       }
     }
-        static Tuple<HashSet<string>, HashSet<string>> ReadCSV(string csv_path)
+    static Tuple<HashSet<string>, HashSet<string>> ReadCSV(string csv_path)
+    {
+        HashSet<string> mrnList = new HashSet<string>();
+        HashSet<string> diagnosisList = new HashSet<string>();
+        using (var reader = new StreamReader(csv_path))
         {
-            HashSet<string> mrnList = new HashSet<string>();
-            HashSet<string> diagnosisList = new HashSet<string>();
-            using (var reader = new StreamReader(csv_path))
+            while (!reader.EndOfStream)
             {
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    var values = line.Split(',');
+                var line = reader.ReadLine();
+                var values = line.Split(',');
 
-                    mrnList.Add(values[0]);
-                    diagnosisList.Add(values[1]);
-                }
+                mrnList.Add(values[0]);
+                diagnosisList.Add(values[1]);
             }
-            return Tuple.Create(mrnList, diagnosisList);
         }
+        return Tuple.Create(mrnList, diagnosisList);
+    }
     static StreamWriter return_streamwriter(string file_path, bool new_file)
         {
             if (!File.Exists(file_path) | (new_file))
@@ -66,17 +66,16 @@ namespace ExtractPlanInfo
         }
     static void Execute(Application app)
     {
-            // TODO: Add your code here.
             List<string> mrnList;
             List<string> diagnosisList;
             string patient_MRN;
             string out_path, patient_path;
             string base_path = @"C:\Users\b5anderson\Desktop\Plan_Data";
             string overall_path = Path.Combine(base_path, "All_Patients.txt");
+            string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
             if (!File.Exists(overall_path))
             {
                 StreamWriter fid_overall = return_streamwriter(overall_path, true);
-                string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
                 fid_overall.WriteLine(top_row);
                 fid_overall.Close();
             }
