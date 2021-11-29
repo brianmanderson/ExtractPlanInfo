@@ -75,7 +75,7 @@ namespace ExtractPlanInfo
             string overall_path = Path.Combine(base_path, "All_Patients.txt");
             if (!File.Exists(overall_path))
             {
-                StreamWriter fid_overall = return_streamwriter(overall_path, false);
+                StreamWriter fid_overall = return_streamwriter(overall_path, true);
                 string top_row = "MRN, CourseID, PlanID, BeamID, EnergyDisplayName, SSD, GantryAngle, Diagnosis Code";
                 fid_overall.WriteLine(top_row);
                 fid_overall.Close();
